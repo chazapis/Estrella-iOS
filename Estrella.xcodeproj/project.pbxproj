@@ -23,7 +23,7 @@
 		E20A39F6223E588D008DC23B /* DExtraConnectAckPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39EA223E588D008DC23B /* DExtraConnectAckPacket.m */; };
 		E20A39F9223E58D0008DC23B /* DExtraClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39F8223E58D0008DC23B /* DExtraClient.m */; };
 		E276C7EF223E534500D1611B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E276C7EE223E534500D1611B /* AppDelegate.m */; };
-		E276C7F2223E534500D1611B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E276C7F1223E534500D1611B /* ViewController.m */; };
+		E276C7F2223E534500D1611B /* ConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E276C7F1223E534500D1611B /* ConnectionViewController.m */; };
 		E276C7F5223E534500D1611B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E276C7F3223E534500D1611B /* Main.storyboard */; };
 		E276C7F7223E534600D1611B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E276C7F6223E534600D1611B /* Assets.xcassets */; };
 		E276C7FA223E534600D1611B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E276C7F8223E534600D1611B /* LaunchScreen.storyboard */; };
@@ -62,8 +62,8 @@
 		E276C7EA223E534500D1611B /* Estrella.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Estrella.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E276C7ED223E534500D1611B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E276C7EE223E534500D1611B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		E276C7F0223E534500D1611B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		E276C7F1223E534500D1611B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		E276C7F0223E534500D1611B /* ConnectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConnectionViewController.h; sourceTree = "<group>"; };
+		E276C7F1223E534500D1611B /* ConnectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnectionViewController.m; sourceTree = "<group>"; };
 		E276C7F4223E534500D1611B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E276C7F6223E534600D1611B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E276C7F9223E534600D1611B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -147,8 +147,8 @@
 				E20A39D2223E5865008DC23B /* Packets */,
 				E20A39F7223E58D0008DC23B /* DExtraClient.h */,
 				E20A39F8223E58D0008DC23B /* DExtraClient.m */,
-				E276C7F0223E534500D1611B /* ViewController.h */,
-				E276C7F1223E534500D1611B /* ViewController.m */,
+				E276C7F0223E534500D1611B /* ConnectionViewController.h */,
+				E276C7F1223E534500D1611B /* ConnectionViewController.m */,
 				E276C7ED223E534500D1611B /* AppDelegate.h */,
 				E276C7EE223E534500D1611B /* AppDelegate.m */,
 				E276C7F3223E534500D1611B /* Main.storyboard */,
@@ -261,7 +261,7 @@
 				E20A39F1223E588D008DC23B /* DExtraConnectNackPacket.m in Sources */,
 				E20A39F5223E588D008DC23B /* DExtraDisconnectPacket.m in Sources */,
 				E20A39F0223E588D008DC23B /* DExtraDisconnectAckPacket.m in Sources */,
-				E276C7F2223E534500D1611B /* ViewController.m in Sources */,
+				E276C7F2223E534500D1611B /* ConnectionViewController.m in Sources */,
 				E20A39F4223E588D008DC23B /* DVStream.m in Sources */,
 				E20A39EC223E588D008DC23B /* DSTARHeader.m in Sources */,
 				E20A39F3223E588D008DC23B /* DVHeaderPacket.m in Sources */,
