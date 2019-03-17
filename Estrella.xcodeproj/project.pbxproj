@@ -7,6 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E20A39CE223E5635008DC23B /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E20A39CD223E5635008DC23B /* CocoaAsyncSocket.framework */; };
+		E20A39D0223E5638008DC23B /* CocoaCodec2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E20A39CF223E5638008DC23B /* CocoaCodec2.framework */; };
+		E20A39EB223E588D008DC23B /* DExtraConnectPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39D5223E588C008DC23B /* DExtraConnectPacket.m */; };
+		E20A39EC223E588D008DC23B /* DSTARHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39D8223E588C008DC23B /* DSTARHeader.m */; };
+		E20A39ED223E588D008DC23B /* DSTARFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39D9223E588C008DC23B /* DSTARFrame.m */; };
+		E20A39EE223E588D008DC23B /* NSData+CRC.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39DC223E588C008DC23B /* NSData+CRC.m */; };
+		E20A39EF223E588D008DC23B /* DExtraKeepAlivePacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39DE223E588C008DC23B /* DExtraKeepAlivePacket.m */; };
+		E20A39F0223E588D008DC23B /* DExtraDisconnectAckPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39DF223E588C008DC23B /* DExtraDisconnectAckPacket.m */; };
+		E20A39F1223E588D008DC23B /* DExtraConnectNackPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39E2223E588C008DC23B /* DExtraConnectNackPacket.m */; };
+		E20A39F2223E588D008DC23B /* DVFramePacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39E4223E588C008DC23B /* DVFramePacket.m */; };
+		E20A39F3223E588D008DC23B /* DVHeaderPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39E6223E588D008DC23B /* DVHeaderPacket.m */; };
+		E20A39F4223E588D008DC23B /* DVStream.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39E7223E588D008DC23B /* DVStream.m */; };
+		E20A39F5223E588D008DC23B /* DExtraDisconnectPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39E8223E588D008DC23B /* DExtraDisconnectPacket.m */; };
+		E20A39F6223E588D008DC23B /* DExtraConnectAckPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39EA223E588D008DC23B /* DExtraConnectAckPacket.m */; };
+		E20A39F9223E58D0008DC23B /* DExtraClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E20A39F8223E58D0008DC23B /* DExtraClient.m */; };
 		E276C7EF223E534500D1611B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E276C7EE223E534500D1611B /* AppDelegate.m */; };
 		E276C7F2223E534500D1611B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E276C7F1223E534500D1611B /* ViewController.m */; };
 		E276C7F5223E534500D1611B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E276C7F3223E534500D1611B /* Main.storyboard */; };
@@ -16,6 +31,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E20A39CD223E5635008DC23B /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaAsyncSocket.framework; path = Carthage/Build/iOS/CocoaAsyncSocket.framework; sourceTree = "<group>"; };
+		E20A39CF223E5638008DC23B /* CocoaCodec2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaCodec2.framework; path = Carthage/Build/iOS/CocoaCodec2.framework; sourceTree = "<group>"; };
+		E20A39D3223E588C008DC23B /* DExtraConnectNackPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DExtraConnectNackPacket.h; sourceTree = "<group>"; };
+		E20A39D4223E588C008DC23B /* DExtraDisconnectPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DExtraDisconnectPacket.h; sourceTree = "<group>"; };
+		E20A39D5223E588C008DC23B /* DExtraConnectPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DExtraConnectPacket.m; sourceTree = "<group>"; };
+		E20A39D6223E588C008DC23B /* DExtraDisconnectAckPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DExtraDisconnectAckPacket.h; sourceTree = "<group>"; };
+		E20A39D7223E588C008DC23B /* DSTARFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSTARFrame.h; sourceTree = "<group>"; };
+		E20A39D8223E588C008DC23B /* DSTARHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSTARHeader.m; sourceTree = "<group>"; };
+		E20A39D9223E588C008DC23B /* DSTARFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSTARFrame.m; sourceTree = "<group>"; };
+		E20A39DA223E588C008DC23B /* DVFramePacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVFramePacket.h; sourceTree = "<group>"; };
+		E20A39DB223E588C008DC23B /* NSData+CRC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC.h"; sourceTree = "<group>"; };
+		E20A39DC223E588C008DC23B /* NSData+CRC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC.m"; sourceTree = "<group>"; };
+		E20A39DD223E588C008DC23B /* DExtraConnectPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DExtraConnectPacket.h; sourceTree = "<group>"; };
+		E20A39DE223E588C008DC23B /* DExtraKeepAlivePacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DExtraKeepAlivePacket.m; sourceTree = "<group>"; };
+		E20A39DF223E588C008DC23B /* DExtraDisconnectAckPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DExtraDisconnectAckPacket.m; sourceTree = "<group>"; };
+		E20A39E0223E588C008DC23B /* DExtraConnectAckPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DExtraConnectAckPacket.h; sourceTree = "<group>"; };
+		E20A39E1223E588C008DC23B /* DExtraKeepAlivePacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DExtraKeepAlivePacket.h; sourceTree = "<group>"; };
+		E20A39E2223E588C008DC23B /* DExtraConnectNackPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DExtraConnectNackPacket.m; sourceTree = "<group>"; };
+		E20A39E3223E588C008DC23B /* DSTARHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSTARHeader.h; sourceTree = "<group>"; };
+		E20A39E4223E588C008DC23B /* DVFramePacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVFramePacket.m; sourceTree = "<group>"; };
+		E20A39E5223E588D008DC23B /* DVHeaderPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVHeaderPacket.h; sourceTree = "<group>"; };
+		E20A39E6223E588D008DC23B /* DVHeaderPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVHeaderPacket.m; sourceTree = "<group>"; };
+		E20A39E7223E588D008DC23B /* DVStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVStream.m; sourceTree = "<group>"; };
+		E20A39E8223E588D008DC23B /* DExtraDisconnectPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DExtraDisconnectPacket.m; sourceTree = "<group>"; };
+		E20A39E9223E588D008DC23B /* DVStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVStream.h; sourceTree = "<group>"; };
+		E20A39EA223E588D008DC23B /* DExtraConnectAckPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DExtraConnectAckPacket.m; sourceTree = "<group>"; };
+		E20A39F7223E58D0008DC23B /* DExtraClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DExtraClient.h; sourceTree = "<group>"; };
+		E20A39F8223E58D0008DC23B /* DExtraClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DExtraClient.m; sourceTree = "<group>"; };
 		E276C7EA223E534500D1611B /* Estrella.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Estrella.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E276C7ED223E534500D1611B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E276C7EE223E534500D1611B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -33,16 +76,59 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E20A39CE223E5635008DC23B /* CocoaAsyncSocket.framework in Frameworks */,
+				E20A39D0223E5638008DC23B /* CocoaCodec2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E20A39CC223E5635008DC23B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E20A39CF223E5638008DC23B /* CocoaCodec2.framework */,
+				E20A39CD223E5635008DC23B /* CocoaAsyncSocket.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E20A39D2223E5865008DC23B /* Packets */ = {
+			isa = PBXGroup;
+			children = (
+				E20A39DD223E588C008DC23B /* DExtraConnectPacket.h */,
+				E20A39D5223E588C008DC23B /* DExtraConnectPacket.m */,
+				E20A39E0223E588C008DC23B /* DExtraConnectAckPacket.h */,
+				E20A39EA223E588D008DC23B /* DExtraConnectAckPacket.m */,
+				E20A39D3223E588C008DC23B /* DExtraConnectNackPacket.h */,
+				E20A39E2223E588C008DC23B /* DExtraConnectNackPacket.m */,
+				E20A39D4223E588C008DC23B /* DExtraDisconnectPacket.h */,
+				E20A39E8223E588D008DC23B /* DExtraDisconnectPacket.m */,
+				E20A39D6223E588C008DC23B /* DExtraDisconnectAckPacket.h */,
+				E20A39DF223E588C008DC23B /* DExtraDisconnectAckPacket.m */,
+				E20A39E1223E588C008DC23B /* DExtraKeepAlivePacket.h */,
+				E20A39DE223E588C008DC23B /* DExtraKeepAlivePacket.m */,
+				E20A39E5223E588D008DC23B /* DVHeaderPacket.h */,
+				E20A39E6223E588D008DC23B /* DVHeaderPacket.m */,
+				E20A39DA223E588C008DC23B /* DVFramePacket.h */,
+				E20A39E4223E588C008DC23B /* DVFramePacket.m */,
+				E20A39E9223E588D008DC23B /* DVStream.h */,
+				E20A39E7223E588D008DC23B /* DVStream.m */,
+				E20A39E3223E588C008DC23B /* DSTARHeader.h */,
+				E20A39D8223E588C008DC23B /* DSTARHeader.m */,
+				E20A39D7223E588C008DC23B /* DSTARFrame.h */,
+				E20A39D9223E588C008DC23B /* DSTARFrame.m */,
+				E20A39DB223E588C008DC23B /* NSData+CRC.h */,
+				E20A39DC223E588C008DC23B /* NSData+CRC.m */,
+			);
+			name = Packets;
+			sourceTree = "<group>";
+		};
 		E276C7E1223E534500D1611B = {
 			isa = PBXGroup;
 			children = (
 				E276C7EC223E534500D1611B /* Estrella */,
+				E20A39CC223E5635008DC23B /* Frameworks */,
 				E276C7EB223E534500D1611B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -58,13 +144,16 @@
 		E276C7EC223E534500D1611B /* Estrella */ = {
 			isa = PBXGroup;
 			children = (
-				E276C7ED223E534500D1611B /* AppDelegate.h */,
-				E276C7EE223E534500D1611B /* AppDelegate.m */,
+				E20A39D2223E5865008DC23B /* Packets */,
+				E20A39F7223E58D0008DC23B /* DExtraClient.h */,
+				E20A39F8223E58D0008DC23B /* DExtraClient.m */,
 				E276C7F0223E534500D1611B /* ViewController.h */,
 				E276C7F1223E534500D1611B /* ViewController.m */,
+				E276C7ED223E534500D1611B /* AppDelegate.h */,
+				E276C7EE223E534500D1611B /* AppDelegate.m */,
 				E276C7F3223E534500D1611B /* Main.storyboard */,
-				E276C7F6223E534600D1611B /* Assets.xcassets */,
 				E276C7F8223E534600D1611B /* LaunchScreen.storyboard */,
+				E276C7F6223E534600D1611B /* Assets.xcassets */,
 				E276C7FB223E534600D1611B /* Info.plist */,
 				E276C7FC223E534600D1611B /* main.m */,
 			);
@@ -81,6 +170,7 @@
 				E276C7E6223E534500D1611B /* Sources */,
 				E276C7E7223E534500D1611B /* Frameworks */,
 				E276C7E8223E534500D1611B /* Resources */,
+				E20A39D1223E564E008DC23B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -136,14 +226,51 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		E20A39D1223E564E008DC23B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaAsyncSocket.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaCodec2.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaAsyncSocket.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaCodec2.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -e /opt/local/bin/carthage ]; then\n    /opt/local/bin/carthage copy-frameworks\nelif [ -e /usr/local/bin/carthage ]; then\n    /usr/local/bin/carthage copy-frameworks\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E276C7E6223E534500D1611B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E20A39F9223E58D0008DC23B /* DExtraClient.m in Sources */,
+				E20A39F2223E588D008DC23B /* DVFramePacket.m in Sources */,
+				E20A39EF223E588D008DC23B /* DExtraKeepAlivePacket.m in Sources */,
+				E20A39F1223E588D008DC23B /* DExtraConnectNackPacket.m in Sources */,
+				E20A39F5223E588D008DC23B /* DExtraDisconnectPacket.m in Sources */,
+				E20A39F0223E588D008DC23B /* DExtraDisconnectAckPacket.m in Sources */,
 				E276C7F2223E534500D1611B /* ViewController.m in Sources */,
+				E20A39F4223E588D008DC23B /* DVStream.m in Sources */,
+				E20A39EC223E588D008DC23B /* DSTARHeader.m in Sources */,
+				E20A39F3223E588D008DC23B /* DVHeaderPacket.m in Sources */,
 				E276C7FD223E534600D1611B /* main.m in Sources */,
+				E20A39F6223E588D008DC23B /* DExtraConnectAckPacket.m in Sources */,
+				E20A39EB223E588D008DC23B /* DExtraConnectPacket.m in Sources */,
+				E20A39ED223E588D008DC23B /* DSTARFrame.m in Sources */,
 				E276C7EF223E534500D1611B /* AppDelegate.m in Sources */,
+				E20A39EE223E588D008DC23B /* NSData+CRC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,6 +413,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Estrella/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -302,6 +433,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Estrella/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
