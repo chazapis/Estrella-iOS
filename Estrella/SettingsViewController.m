@@ -1,5 +1,5 @@
 //
-// ConnectionViewController.h
+// SettingsViewController.m
 //
 // Copyright (C) 2019 Antony Chazapis SV9OAN
 //
@@ -17,21 +17,25 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#import <UIKit/UIKit.h>
-
-#import "DExtraClient.h"
 #import "SettingsViewController.h"
 
-@interface ConnectionViewController : UIViewController <DExtraClientDelegate, UINavigationControllerDelegate, SettingsViewControllerDelegate>
+@implementation SettingsViewController
 
-- (IBAction)showPreferences:(id)sender;
-- (IBAction)pressPTT:(id)sender;
-- (IBAction)releasePTT:(id)sender;
+- (void)viewDidLoad {
+    [super viewDidLoad];
+}
 
-@property (nonatomic, weak) IBOutlet UILabel *statusTextField;
-@property (nonatomic, weak) IBOutlet UILabel *userTextField;
-@property (nonatomic, weak) IBOutlet UILabel *repeaterTextField;
-@property (nonatomic, weak) IBOutlet UILabel *infoTextField;
-@property (nonatomic, weak) IBOutlet UIButton *pttButton;
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [self.delegate fillInSettingsViewController:self];
+}
+
+- (IBAction)applyPressed:(id)sender {
+    [self.delegate applyChangesFromSettingsViewController:self];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)cancelPressed:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end

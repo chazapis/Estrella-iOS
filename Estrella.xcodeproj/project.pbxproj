@@ -28,6 +28,7 @@
 		E276C7F7223E534600D1611B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E276C7F6223E534600D1611B /* Assets.xcassets */; };
 		E276C7FA223E534600D1611B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E276C7F8223E534600D1611B /* LaunchScreen.storyboard */; };
 		E276C7FD223E534600D1611B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E276C7FC223E534600D1611B /* main.m */; };
+		E2C5953422426003002F4CE6 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2C5953322426003002F4CE6 /* SettingsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +70,8 @@
 		E276C7F9223E534600D1611B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E276C7FB223E534600D1611B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E276C7FC223E534600D1611B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E2C5953222426003002F4CE6 /* SettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		E2C5953322426003002F4CE6 /* SettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +152,8 @@
 				E20A39F8223E58D0008DC23B /* DExtraClient.m */,
 				E276C7F0223E534500D1611B /* ConnectionViewController.h */,
 				E276C7F1223E534500D1611B /* ConnectionViewController.m */,
+				E2C5953222426003002F4CE6 /* SettingsViewController.h */,
+				E2C5953322426003002F4CE6 /* SettingsViewController.m */,
 				E276C7ED223E534500D1611B /* AppDelegate.h */,
 				E276C7EE223E534500D1611B /* AppDelegate.m */,
 				E276C7F3223E534500D1611B /* Main.storyboard */,
@@ -264,6 +269,7 @@
 				E276C7F2223E534500D1611B /* ConnectionViewController.m in Sources */,
 				E20A39F4223E588D008DC23B /* DVStream.m in Sources */,
 				E20A39EC223E588D008DC23B /* DSTARHeader.m in Sources */,
+				E2C5953422426003002F4CE6 /* SettingsViewController.m in Sources */,
 				E20A39F3223E588D008DC23B /* DVHeaderPacket.m in Sources */,
 				E276C7FD223E534600D1611B /* main.m in Sources */,
 				E20A39F6223E588D008DC23B /* DExtraConnectAckPacket.m in Sources */,
