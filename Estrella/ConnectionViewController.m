@@ -343,10 +343,10 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
         switch (_radioStatus) {
             case RadioStatusIdle:
                 // XXX: If transmitting, depress button and remove audio tap...
-                // self.pttButton.enabled = (self.clientStatus == DExtraClientStatusConnected);
+                self.pttButton.enabled = (self.clientStatus == DExtraClientStatusConnected);
                 break;
             case RadioStatusReceiving:
-                // self.pttButton.enabled = NO;
+                self.pttButton.enabled = NO;
                 break;
             case RadioStatusTransmitting:
                 break;
