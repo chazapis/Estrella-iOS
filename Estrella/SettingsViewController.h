@@ -28,7 +28,7 @@
 
 @end
 
-@interface SettingsViewController : UIViewController
+@interface SettingsViewController : UIViewController <UITextFieldDelegate>
 
 - (IBAction)applyPressed:(id)sender;
 - (IBAction)cancelPressed:(id)sender;

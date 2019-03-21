@@ -23,6 +23,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.userCallsignTextField.delegate = self;
+    self.reflectorCallsignTextField.delegate = self;
+    self.reflectorModuleTextField.delegate = self;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -36,6 +40,37 @@
 
 - (IBAction)cancelPressed:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+# pragma mark UITextFieldDelegate
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (textField == self.userCallsignTextField || textField == self.reflectorCallsignTextField) {
+        if (range.location > 6 || range.length > 7)
+            return NO;
+        if (string.length > 7)
+            return NO;
+        if (string.length > 0) {
+            unichar c;
+            for (int i = 0; i < string.length; i++) {
+                c = [string characterAtIndex:i];
+                if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z')))
+                    return NO;
+            }
+        }
+    } else if (textField == self.reflectorModuleTextField) {
+        if (range.location > 0 || range.length > 1)
+            return NO;
+        if (string.length > 1)
+            return NO;
+        if (string.length > 0) {
+            unichar c = [string characterAtIndex:0];
+            if (!(c >= 'A' && c <= 'Z'))
+                return NO;
+        }
+    }
+    
+    return YES;
 }
 
 @end
