@@ -20,11 +20,8 @@
 #import "ConnectionViewController.h"
 
 #import <AVFoundation/AVFoundation.h>
-#import <CocoaCodec2/codec2.h>
 
 #include <unistd.h>
-
-#import "DVStream.h"
 
 typedef NS_ENUM(NSInteger, RadioStatus) {
     RadioStatusIdle,
@@ -32,9 +29,7 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     RadioStatusTransmitting
 };
 
-@interface ConnectionViewController () {
-    struct CODEC2 *codec2State;
-};
+@interface ConnectionViewController ()
 
 - (void)connect;
 - (void)disconnect;
@@ -56,9 +51,8 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
 @property (nonatomic, strong) AVAudioFormat *audioPlayerFormat;
 @property (nonatomic, strong) AVAudioInputNode *audioInputNode;
 @property (nonatomic, strong) AVAudioFormat *audioInputFormat;
-@property (nonatomic, strong) AVAudioFormat *audioRecorderFormat;
-@property (nonatomic, strong) AVAudioConverter *audioRecorderConverter;
 
+@property (nonatomic, strong) DVCodec *dvCodec;
 @property (nonatomic, strong) dispatch_queue_t transmitQueue;
 
 @property (nonatomic, strong) DExtraClient *dextraClient;
@@ -86,7 +80,6 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
         [self.dextraClient disconnect];
     if (self.statusTimer)
         [self.statusTimer invalidate];
-    codec2_destroy(codec2State);
 }
 
 - (void)viewDidLoad {
@@ -99,17 +92,12 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     [self.pttButton addTarget:self action:@selector(pressPTT:) forControlEvents:UIControlEventTouchDown];
     [self.pttButton addTarget:self action:@selector(releasePTT:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchDragExit];
 
-    // Codec context
-    codec2State = codec2_create(CODEC2_MODE_3200);
-    
     // Initialize audio
     self.audioEngine = [[AVAudioEngine alloc] init];
     self.audioPlayerNode = [[AVAudioPlayerNode alloc] init];
     self.audioPlayerFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatFloat32 sampleRate:8000 channels:2 interleaved:NO];
     self.audioInputNode = [self.audioEngine inputNode];
     self.audioInputFormat = [self.audioInputNode outputFormatForBus:0];
-    self.audioRecorderFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatInt16 sampleRate:8000 channels:1 interleaved:NO];
-    self.audioRecorderConverter = [[AVAudioConverter alloc] initFromFormat:self.audioInputFormat toFormat:self.audioRecorderFormat];
     
     NSError *error;
     
@@ -121,7 +109,8 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     // XXX: Start and stop for every transmission...
     [self.audioPlayerNode play];
     
-    // Transmit processing queue
+    // Codec and transmit processing queue
+    self.dvCodec = [[DVCodec alloc] initWithPlayerFormat:self.audioPlayerFormat recorderFormat:self.audioInputFormat];
     self.transmitQueue = dispatch_queue_create("com.koomasi.Estrella.tx", NULL);
     dispatch_set_target_queue(self.transmitQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
     
@@ -278,25 +267,7 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
         // NSLog(@"ConnectionViewController: Got %d samples in the input buffer with format %@", inputBuffer.frameLength, inputBuffer.format);
         
         dispatch_async(self.transmitQueue, ^(void){
-            NSError *error;
-            
-            AVAudioPCMBuffer *recorderBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:self.audioRecorderFormat frameCapacity:self.audioRecorderFormat.sampleRate * 0.2];
-            AVAudioConverterOutputStatus status __unused = [self.audioRecorderConverter convertToBuffer:recorderBuffer error:&error withInputFromBlock:^(AVAudioPacketCount inNumberOfPackets, AVAudioConverterInputStatus *outStatus) {
-                *outStatus = AVAudioConverterInputStatus_HaveData;
-                return inputBuffer;
-            }];
-            // NSLog(@"ConnectionViewController: Converted to %d samples in the conversion buffer (status: %ld)", recorderBuffer.frameLength, status);
-            
-            unsigned char codec[9];
-            unsigned char data[] = {0x00, 0x00, 0x00};
-            for (int i = 0; i < recorderBuffer.frameLength; i += 160) {
-                codec2_encode(self->codec2State, codec, &(recorderBuffer.int16ChannelData[0][i]));
-                codec[8] = 0x00;
-                
-                DSTARFrame *dstarFrame = [[DSTARFrame alloc] initWithCodec:[[NSData alloc] initWithBytes:codec length:9]
-                                                                      data:[[NSData alloc] initWithBytes:data length:3]];
-                [self.transmitStream appendDSTARFrame:dstarFrame];
-            }
+            [self.dvCodec encodeBuffer:inputBuffer intoStream:self.transmitStream];
         });
     }];
     
@@ -428,22 +399,7 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
             self.statusCheckpoint = [NSDate date];
     }
     
-    AVAudioPCMBuffer *playerBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:self.audioPlayerFormat frameCapacity:160];
-    
-    // Providing a PCM buffer with a single channel of 16 bit integers does not work,
-    // so the voice data is converted to dual channel floating point
-    short *voice = (short *)malloc(sizeof(short) * 160);
-    float *fvoice = (float *)malloc(sizeof(float) * 160);
-    codec2_decode(codec2State, voice, dvFramePacket.dstarFrame.codec.bytes);
-    for (int i = 0; i < 160; i++)
-        fvoice[i] = ((float)voice[i]) / 32768.0;
-    playerBuffer.frameLength = 160;
-    memcpy(playerBuffer.floatChannelData[0], fvoice, sizeof(float) * 160);
-    memcpy(playerBuffer.floatChannelData[1], fvoice, sizeof(float) * 160);
-    free(fvoice);
-    free(voice);
-    
-    [self.audioPlayerNode scheduleBuffer:playerBuffer completionHandler:nil];
+    [self.audioPlayerNode scheduleBuffer:[self.dvCodec decodeDSTARFrame:dvFramePacket.dstarFrame] completionHandler:nil];
 }
 
 # pragma mark UINavigationControllerDelegate
