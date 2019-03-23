@@ -23,13 +23,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.userCallsignTextField.delegate = self;
     self.reflectorCallsignTextField.delegate = self;
     self.reflectorModuleTextField.delegate = self;
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     [self.delegate fillInSettingsViewController:self];
 }
 
