@@ -66,6 +66,7 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
 @property (nonatomic, strong) NSString *reflectorHost;
 @property (nonatomic, assign) BOOL connectAutomatically;
 
+@property (nonatomic, assign) BOOL microphoneAvailable;
 @property (nonatomic, assign) DExtraClientStatus clientStatus;
 @property (nonatomic, assign) RadioStatus radioStatus;
 @property (nonatomic, strong) DVHeaderPacket *receiveHeader;
@@ -149,6 +150,7 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     }
     
     // Radio state
+    _microphoneAvailable = NO;
     _clientStatus = DExtraClientStatusIdle;
     _radioStatus = RadioStatusIdle; // Do not trigger a display update
     _receiveHeader = nil;
@@ -324,10 +326,13 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
         _radioStatus = radioStatus;
         switch (_radioStatus) {
             case RadioStatusIdle:
+            {
                 // XXX: If transmitting, depress button and remove audio tap...
-                self.pttButton.enabled = (self.clientStatus == DExtraClientStatusConnected);
-                self.pttButton.alpha = (self.clientStatus == DExtraClientStatusConnected ? 1.0 : 0.5);
+                BOOL enablePTT = ((self.clientStatus == DExtraClientStatusConnected) && self.microphoneAvailable);
+                self.pttButton.enabled = enablePTT;
+                self.pttButton.alpha = (enablePTT ? 1.0 : 0.5);
                 break;
+            }
             case RadioStatusReceiving:
                 self.pttButton.enabled = NO;
                 self.pttButton.alpha = 0.5;
@@ -381,7 +386,37 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
         case DExtraClientStatusDisconnecting:
             break;
     }
-    
+
+    self.microphoneAvailable = NO;
+    if (status == DExtraClientStatusConnected) {
+        switch ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio]) {
+            case AVAuthorizationStatusAuthorized:
+                self.microphoneAvailable = YES;
+                break;
+            case AVAuthorizationStatusNotDetermined:
+            {
+                [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+                    if (granted) {
+                        self.microphoneAvailable = YES;
+                        [self updateDisplay];
+                    }
+                }];
+                break;
+            }
+            case AVAuthorizationStatusDenied:
+            {
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"No microphone access"
+                                                                               message:@"Microphone access has been denied, so no audio can be transmitted to the server."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+                [self presentViewController:alert animated:YES completion:nil];
+                break;
+            }
+            case AVAuthorizationStatusRestricted:
+                break;
+        }
+    }
+
     self.clientStatus = status;
     self.radioStatus = RadioStatusIdle;
 }
