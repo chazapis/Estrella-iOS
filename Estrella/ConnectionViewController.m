@@ -222,17 +222,17 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
         [attributedStatus addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(18, 2)];
         self.statusTextField.attributedText = attributedStatus;
     } else {
-        NSString *status = @"NET                .";
-        NSMutableAttributedString *attributedStatus = [[NSMutableAttributedString alloc] initWithString:status];
-        [attributedStatus addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:NSMakeRange(19, 1)];
-        self.statusTextField.attributedText = attributedStatus; // UILabel trims spaces
+        self.statusTextField.text = @"NET";
     }
     
     if (self.clientStatus == DExtraClientStatusConnected) {
         if ((self.radioStatus == RadioStatusReceiving) && self.receiveHeader) {
             DSTARHeader *dstarHeader = self.receiveHeader.dstarHeader;
-            self.userTextField.text = [NSString stringWithFormat:@"%@ -> %@", dstarHeader.myCallsign, dstarHeader.urCallsign];
-            self.repeaterTextField.text = [NSString stringWithFormat:@"%@ -> %@", dstarHeader.repeater1Callsign, dstarHeader.repeater2Callsign];
+            NSString *paddedMyCallsign = [dstarHeader.myCallsign stringByPaddingToLength:8 withString:@" " startingAtIndex:0];
+            self.userTextField.text = [NSString stringWithFormat:@"%@ -> %@", paddedMyCallsign, dstarHeader.urCallsign];
+            
+            NSString *paddedRepeater1Callsign = [dstarHeader.repeater1Callsign stringByPaddingToLength:8 withString:@" " startingAtIndex:0];
+            self.repeaterTextField.text = [NSString stringWithFormat:@"%@ -> %@", paddedRepeater1Callsign, dstarHeader.repeater2Callsign];
         } else {
             NSString *paddedUserCallsign = [self.userCallsign stringByPaddingToLength:8 withString:@" " startingAtIndex:0];
             self.userTextField.text = [NSString stringWithFormat:@"%@ -> CQCQCQ", paddedUserCallsign];
@@ -245,10 +245,17 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
         self.repeaterTextField.text = @"";
     }
 
-    NSString *info = [NSString stringWithFormat:@"%@.", [NSStringFromDExtraClientStatus(self.clientStatus) stringByPaddingToLength:19 withString:@" " startingAtIndex:0]];
-    NSMutableAttributedString *attributedInfo = [[NSMutableAttributedString alloc] initWithString:info];
-    [attributedInfo addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:NSMakeRange(19, 1)];
-    self.infoTextField.attributedText = attributedInfo; // UILabel trims spaces
+    self.infoTextField.text = NSStringFromDExtraClientStatus(self.clientStatus);
+
+    // UILabel trims spaces
+    for (UITextField *textField in @[self.statusTextField, self.userTextField, self.repeaterTextField, self.infoTextField]) {
+        if (textField.text.length < 20) {
+            NSUInteger length = textField.text.length;
+            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[textField.text stringByPaddingToLength:20 withString:@"." startingAtIndex:0]];
+            [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:NSMakeRange(length, 20 - length)];
+            textField.attributedText = attributedString;
+        }
+    }
 }
 
 - (void)startTransmitting {
