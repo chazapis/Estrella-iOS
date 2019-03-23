@@ -153,6 +153,10 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     _radioStatus = RadioStatusIdle; // Do not trigger a display update
     _receiveHeader = nil;
     _transmitStream = nil;
+
+    // Start with disabled PTT
+    self.pttButton.enabled = NO;
+    self.pttButton.alpha = 0.5;
 }
 
 - (void)connect {
@@ -315,9 +319,11 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
             case RadioStatusIdle:
                 // XXX: If transmitting, depress button and remove audio tap...
                 self.pttButton.enabled = (self.clientStatus == DExtraClientStatusConnected);
+                self.pttButton.alpha = (self.clientStatus == DExtraClientStatusConnected ? 1.0 : 0.5);
                 break;
             case RadioStatusReceiving:
                 self.pttButton.enabled = NO;
+                self.pttButton.alpha = 0.5;
                 break;
             case RadioStatusTransmitting:
                 break;
