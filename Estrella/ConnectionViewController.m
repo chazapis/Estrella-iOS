@@ -83,6 +83,57 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
         [self.statusTimer invalidate];
 }
 
+- (void)audioSessionRouteChange:(NSNotification*)notification {
+    NSInteger routeChangeReason = [[notification.userInfo valueForKey:AVAudioSessionRouteChangeReasonKey] integerValue];
+    
+    switch (routeChangeReason) {
+        case AVAudioSessionRouteChangeReasonUnknown:
+            NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonUnknown");
+            break;
+            
+        case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
+        {
+            // a headset was added or removed
+            NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonNewDeviceAvailable");
+            NSError *error;
+            [self.audioEngine stop];
+            if (![self.audioEngine startAndReturnError:&error])
+                NSLog(@"ConnectionViewController: Could not start audio engine: %@", error.description);
+            [self.audioPlayerNode play];
+            break;
+        }
+        case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
+        {
+            // a headset was added or removed
+            NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonOldDeviceUnavailable");
+            NSError *error;
+            [self.audioEngine stop];
+            if (![self.audioEngine startAndReturnError:&error])
+                NSLog(@"ConnectionViewController: Could not start audio engine: %@", error.description);
+            [self.audioPlayerNode play];
+            break;
+        }
+        case AVAudioSessionRouteChangeReasonCategoryChange:
+            // called at start - also when other audio wants to play
+            NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonCategoryChange");//AVAudioSessionRouteChangeReasonCategoryChange
+            break;
+            
+        case AVAudioSessionRouteChangeReasonOverride:
+            NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonOverride");
+            break;
+            
+        case AVAudioSessionRouteChangeReasonWakeFromSleep:
+            NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonWakeFromSleep");
+            break;
+            
+        case AVAudioSessionRouteChangeReasonNoSuitableRouteForCategory:
+            NSLog(@"routeChangeReason : AVAudioSessionRouteChangeReasonNoSuitableRouteForCategory");
+            break;
+            
+        default:
+            break;
+    }
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -94,13 +145,19 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     [self.pttButton addTarget:self action:@selector(releasePTT:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchDragExit];
 
     // Initialize audio
+    NSError *error;
+
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:&error];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(audioSessionRouteChange:)
+                                                 name:AVAudioSessionRouteChangeNotification
+                                               object:nil];
+
     self.audioEngine = [[AVAudioEngine alloc] init];
     self.audioPlayerNode = [[AVAudioPlayerNode alloc] init];
     self.audioPlayerFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatFloat32 sampleRate:8000 channels:2 interleaved:NO];
     self.audioInputNode = [self.audioEngine inputNode];
     self.audioInputFormat = [self.audioInputNode outputFormatForBus:0];
-    
-    NSError *error;
     
     [self.audioEngine attachNode:self.audioPlayerNode];
     [self.audioEngine connect:self.audioPlayerNode to:self.audioEngine.mainMixerNode format:self.audioPlayerFormat];
