@@ -94,13 +94,16 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     [self.pttButton addTarget:self action:@selector(releasePTT:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchDragExit];
 
     // Initialize audio
+    NSError *error;
+
+    if (![[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:&error])
+        NSLog(@"ConnectionViewController: Could not configure audio session: %@", error.description);
+
     self.audioEngine = [[AVAudioEngine alloc] init];
     self.audioPlayerNode = [[AVAudioPlayerNode alloc] init];
     self.audioPlayerFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatFloat32 sampleRate:8000 channels:2 interleaved:NO];
     self.audioInputNode = [self.audioEngine inputNode];
     self.audioInputFormat = [self.audioInputNode outputFormatForBus:0];
-    
-    NSError *error;
     
     [self.audioEngine attachNode:self.audioPlayerNode];
     [self.audioEngine connect:self.audioPlayerNode to:self.audioEngine.mainMixerNode format:self.audioPlayerFormat];
