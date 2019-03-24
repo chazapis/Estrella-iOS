@@ -26,7 +26,9 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    // Do not lock the screen while running
+    application.idleTimerDisabled = YES;
+    
     return YES;
 }
 
