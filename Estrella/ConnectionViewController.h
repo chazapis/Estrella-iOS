@@ -28,9 +28,9 @@
 - (IBAction)pressPTT:(id)sender;
 - (IBAction)releasePTT:(id)sender;
 
-@property (nonatomic, weak) IBOutlet UILabel *statusTextField;
-@property (nonatomic, weak) IBOutlet UILabel *userTextField;
+@property (nonatomic, weak) IBOutlet UIView *statusView;
 @property (nonatomic, weak) IBOutlet UILabel *repeaterTextField;
+@property (nonatomic, weak) IBOutlet UILabel *userTextField;
 @property (nonatomic, weak) IBOutlet UILabel *infoTextField;
 @property (nonatomic, weak) IBOutlet UIButton *pttButton;
 
