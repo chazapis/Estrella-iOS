@@ -32,8 +32,19 @@
 }
 
 - (IBAction)applyPressed:(id)sender {
-    [self.delegate applyChangesFromSettingsViewController:self];
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self.userCallsignTextField.text isEqualToString:@""] ||
+        [self.reflectorCallsignTextField.text isEqualToString:@""] ||
+        [self.reflectorModuleTextField.text isEqualToString:@""] ||
+        [self.reflectorHostTextField.text isEqualToString:@""]) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Empty configuration"
+                                                                       message:@"All fields are required to establish a connection to the reflector."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        [self.delegate applyChangesFromSettingsViewController:self];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (IBAction)cancelPressed:(id)sender {
