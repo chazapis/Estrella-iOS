@@ -22,6 +22,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 #include <unistd.h>
+#include <mach/mach_time.h>
 
 typedef NS_ENUM(NSInteger, RadioStatus) {
     RadioStatusIdle,
@@ -70,8 +71,9 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
 @property (nonatomic, assign) BOOL microphoneAvailable;
 @property (nonatomic, assign) DExtraClientStatus clientStatus;
 @property (nonatomic, assign) RadioStatus radioStatus;
-@property (nonatomic, strong) DVHeaderPacket *receiveHeader;
-@property (nonatomic, strong) DVStream *transmitStream;
+@property (atomic, strong) DVStream *transmitStream;
+@property (atomic, strong) DVStream *receiveStream;
+@property (atomic, strong) NSThread *receiveThread;
 
 @end
 
@@ -160,8 +162,9 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     _microphoneAvailable = NO;
     _clientStatus = DExtraClientStatusIdle;
     _radioStatus = RadioStatusIdle; // Do not trigger a display update
-    _receiveHeader = nil;
     _transmitStream = nil;
+    _receiveStream = nil;
+    _receiveThread = nil;
 
     // Start with disabled PTT
     self.pttButton.enabled = NO;
@@ -235,8 +238,8 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     
     if (self.clientStatus == DExtraClientStatusConnected) {
         self.repeaterTextField.text = [NSString stringWithFormat:@"%@%@", [self.reflectorCallsign substringFromIndex:3], self.reflectorModule];
-        if ((self.radioStatus == RadioStatusReceiving) && self.receiveHeader) {
-            DSTARHeader *dstarHeader = self.receiveHeader.dstarHeader;
+        if ((self.radioStatus == RadioStatusReceiving) && self.receiveStream) {
+            DSTARHeader *dstarHeader = self.receiveStream.dstarHeader;
             self.userTextField.text = [NSString stringWithFormat:@"%@ to %@", dstarHeader.myCallsign, dstarHeader.urCallsign];
         } else {
             self.userTextField.text = [NSString stringWithFormat:@"%@ to CQCQCQ", self.userCallsign];
@@ -275,16 +278,29 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     
     [NSThread detachNewThreadWithBlock:^(void) {
         @autoreleasepool {
+            [NSThread setThreadPriority:1.0];
+
             // Keep these in case they change
             DExtraClient *dextraClient = self.dextraClient;
             DVStream *transmitStream = self.transmitStream;
-            
+
             // Wait for the first samples to arrive
             while (transmitStream.dvPacketCount < 5)
                 usleep(20000);
-            for (int i = 0; i < transmitStream.dvPacketCount; i++) {
-                [dextraClient sendDVPacket:[transmitStream dvPacketAtIndex:i]];
-                usleep(20000);
+
+            // Start sending, one every 20 msec
+            static mach_timebase_info_data_t timebaseInfo;
+            mach_timebase_info(&timebaseInfo);
+
+            NSUInteger packetCount;
+            uint64_t interval = (20000000 / timebaseInfo.numer) * timebaseInfo.denom;
+            uint64_t tick = mach_absolute_time() + interval;
+            for (int i = 0; i < (packetCount = transmitStream.dvPacketCount);) {
+                for (; i < packetCount; i++) {
+                    [dextraClient sendDVPacket:[transmitStream dvPacketAtIndex:i]];
+                    mach_wait_until(tick);
+                    tick += interval;
+                }
             }
         }
     }];
@@ -425,18 +441,18 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
 
 - (void)dextraClient:(DExtraClient *)client didReceiveDVPacket:(id)packet {
     if ([packet isKindOfClass:[DVHeaderPacket class]]) {
-        self.receiveHeader = (DVHeaderPacket *)packet;
+        self.receiveStream = [[DVStream alloc] initWithDVHeaderPacket:(DVHeaderPacket *)packet];
         return;
     }
     
     DVFramePacket *dvFramePacket = (DVFramePacket *)packet;
     
     if ((self.radioStatus == RadioStatusTransmitting) ||
-        !self.receiveHeader ||
-        (self.receiveHeader.streamId != dvFramePacket.streamId))
+        !self.receiveStream ||
+        (self.receiveStream.streamId != dvFramePacket.streamId))
         return;
     if (dvFramePacket.isLast) {
-        self.receiveHeader = nil;
+        self.receiveStream = nil;
         self.radioStatus = RadioStatusIdle;
         return;
     }
@@ -449,7 +465,41 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
             self.statusCheckpoint = [NSDate date];
     }
     
-    [self.audioPlayerNode scheduleBuffer:[self.dvCodec decodeDSTARFrame:dvFramePacket.dstarFrame] completionHandler:nil];
+    [self.receiveStream appendDVFramePacket:dvFramePacket];
+    if (self.receiveThread && !self.receiveThread.isFinished)
+        return;
+
+    self.receiveThread = [[NSThread alloc] initWithBlock:^(void) {
+        @autoreleasepool {
+            // Keep this in case it changes
+            DVStream *receiveStream = self.receiveStream;
+
+            // Wait for the first samples to arrive
+            while (receiveStream.dvPacketCount < 10)
+                usleep(20000);
+
+            // Start playing, one every 20 msec
+            static mach_timebase_info_data_t timebaseInfo;
+            mach_timebase_info(&timebaseInfo);
+
+            NSUInteger packetCount;
+            uint64_t interval = (20000000 / timebaseInfo.numer) * timebaseInfo.denom;
+            uint64_t tick = mach_absolute_time() + interval;
+            for (int i = 0; i < (packetCount = receiveStream.dvPacketCount);) {
+                for (; i < packetCount; i++) {
+                    id packet = [receiveStream dvPacketAtIndex:i];
+                    if ([packet isKindOfClass:[DVFramePacket class]])
+                        [self.audioPlayerNode scheduleBuffer:[self.dvCodec decodeDSTARFrame:((DVFramePacket *)packet).dstarFrame] completionHandler:nil];
+                    mach_wait_until(tick);
+                    tick += interval;
+                }
+            }
+
+            // If the packets arrive in large intervals, the thread will run again with the same stream
+            [receiveStream removeAllDVFramePackets];
+        }
+    }];
+    [self.receiveThread start];
 }
 
 # pragma mark UINavigationControllerDelegate
