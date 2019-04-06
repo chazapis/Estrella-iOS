@@ -259,7 +259,7 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
     NSString *paddedReflectorCallsign = [self.reflectorCallsign stringByPaddingToLength:7 withString:@" " startingAtIndex:0];
     DSTARHeader *dstarHeader = [[DSTARHeader alloc] initWithFlag1:0
                                                             flag2:0
-                                                            flag3:1 // Codec 2, mode 3200 without FEC
+                                                            flag3:1 // Codec 2 mode 3200 without FEC
                                                 repeater1Callsign:[NSString stringWithFormat:@"%@%@", paddedReflectorCallsign, self.reflectorModule]
                                                 repeater2Callsign:[NSString stringWithFormat:@"%@G", paddedReflectorCallsign]
                                                        urCallsign:@"CQCQCQ"
@@ -441,7 +441,14 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
 
 - (void)dextraClient:(DExtraClient *)client didReceiveDVPacket:(id)packet {
     if ([packet isKindOfClass:[DVHeaderPacket class]]) {
-        self.receiveStream = [[DVStream alloc] initWithDVHeaderPacket:(DVHeaderPacket *)packet];
+        DVHeaderPacket *dvHeaderPacket = (DVHeaderPacket *)packet;
+        if (self.receiveStream &&
+            self.receiveStream.streamId == dvHeaderPacket.streamId)
+            return; // Duplicate header
+        if (dvHeaderPacket.dstarHeader.flag3 != 1 &&
+            dvHeaderPacket.dstarHeader.flag3 != 3)
+            return; // Unsupported codec
+        self.receiveStream = [[DVStream alloc] initWithDVHeaderPacket:dvHeaderPacket];
         return;
     }
     
@@ -489,7 +496,7 @@ typedef NS_ENUM(NSInteger, RadioStatus) {
                 for (; i < packetCount; i++) {
                     id packet = [receiveStream dvPacketAtIndex:i];
                     if ([packet isKindOfClass:[DVFramePacket class]])
-                        [self.audioPlayerNode scheduleBuffer:[self.dvCodec decodeDSTARFrame:((DVFramePacket *)packet).dstarFrame] completionHandler:nil];
+                        [self.audioPlayerNode scheduleBuffer:[self.dvCodec decodeDSTARFrame:((DVFramePacket *)packet).dstarFrame fromStream:receiveStream] completionHandler:nil];
                     mach_wait_until(tick);
                     tick += interval;
                 }
